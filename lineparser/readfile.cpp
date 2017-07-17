@@ -27,6 +27,8 @@ int main() {
 
 	std::stack<char> textSymbols;
 
+	bool errorState = false;
+
 	string line;
 	int lineNumber = 0;
 	ifstream file("text.txt");
@@ -54,6 +56,7 @@ int main() {
 		
 					if (textSymbols.empty()) {
 						cout << endl << "Error: No openning symbol found for " << currentChar;
+						errorState = true;
 						break;
 					}
 
@@ -66,12 +69,18 @@ int main() {
 						textSymbols.pop();
 					} else {
 						cout << endl << "Error: Expected symbol `" << expectedCloseSymbol << "` not found. Found `" << currentChar << "` at line " << lineNumber << " char pos " << charPos;
+						errorState = true;
 						break;
 					}
 
 				}	
 
 			}
+
+			if ((!textSymbols.empty()) && (!errorState)) {
+				cout << endl << "Error: Some symbols were opened but not closed. Plese review your text."; 
+			}
+
 			cout << endl;
 		}
 		file.close();
